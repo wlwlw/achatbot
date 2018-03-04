@@ -10,15 +10,15 @@ chatbot = ChatBot(
     trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
 )
 
-# Train based on the english corpus
-#chatbot.train("chatterbot.corpus.english")
-
-# Get a response to an input statement
-#chatbot.get_response("Hello, how are you today?")
+"""
 @app.route("/")
 def hello():
+	chatbot.get_response("Hello, how are you today?")
     html = "<b>{botname} at {hostname}: </b> Hello {name}!"
     return html.format(botname=chatbot.name, hostname=socket.gethostname(), name=os.getenv("NAME", "world"))
+"""
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80)
+	# Train based on the english corpus
+	chatbot.train("chatterbot.corpus.english")
+    #app.run(host='0.0.0.0', port=80)

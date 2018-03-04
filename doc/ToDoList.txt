@@ -1,6 +1,7 @@
+Project address: https://github.com/wswlymf/achatbot
 
 Done:
-Create and deploy a docker image of a Chatterbot example.
+1. Create and deploy a docker image of a Chatterbot example.
 
 ToDo:
 1. Add pmu-tools to generate throughput benchmark result.
