@@ -7,6 +7,6 @@ chatbot = ChatBot(
 )
 
 if __name__ == "__main__":
-    count = sys.argv[1]
+    count = int(sys.argv[1])
     for i in range(count):
         chatbot.train("chatterbot.corpus.english")

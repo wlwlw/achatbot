@@ -13,7 +13,7 @@ chatbot = ChatBot(
 @app.route("/<question>")
 def response(question):
     response = chatbot.get_response(question)
-    html = "<b>{botname}: </b> {response}"
+    html = "{botname}: {response}"
     return html.format(botname=chatbot.name, response=response)
 
 if __name__ == "__main__":
