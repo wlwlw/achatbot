@@ -1,2 +1,4 @@
 chatterbot
 Flask
+matplotlib
+brewer2mpl

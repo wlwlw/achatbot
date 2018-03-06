@@ -1,7 +1,20 @@
 #!/bin/bash
+# Start benchmark container and run throughput test
+# with 1 2 4 8 thread of size 1 2 4 8 test set. (both needs to be integer)
+# Retreve result back as .csv and .png
 
-#docker rm achatbot
-#echo 0 > /proc/sys/kernel/nmi_watchdog
-pmu-tools/toplev.py -I200 -x, -o test.csv -l3 sleep 20
-pmu-tools/interval-plot.py test.csv
-#docker run --name achatbot achatbots
+docker rm achatbot
+docker run -td --privileged --name achatbot achatbot /bin/bash
+
+for thread in 1 2 4 8
+do
+	for size in 1 2 4 8
+	do
+		docker exec achatbot /app/throughput.sh $size $thread
+		docker cp achatbot:/app/result-$size-$thread-IPC.png ./result/
+		docker cp achatbot:/app/result-$size-$thread-MPKI.png ./result/
+		docker cp achatbot:/app/result-$size-$thread.csv ./result/
+	done
+done
+
+docker stop achatbot
