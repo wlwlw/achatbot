@@ -1,7 +1,7 @@
 doc
 build
+result
 .git
 .gitignore
-pmutools
 setup.sh
 run.sh
