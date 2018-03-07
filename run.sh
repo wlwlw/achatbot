@@ -4,8 +4,9 @@
 # Retreve result back as .csv and .png
 
 docker rm achatbot
-docker run -td --privileged --name achatbot achatbot /bin/bash
+docker run -td --privileged --name achatbot achatbot
 
+# first run throughput test
 for thread in 1 2 4 8
 do
 	for size in 1 2 4 8
@@ -16,5 +17,11 @@ do
 		docker cp achatbot:/app/result-$size-$thread.csv ./result/
 	done
 done
+
+# then run latency test
+LA_SIZE="200"
+docker exec achatbot /app/latency.sh $LA_SIZE
+docker cp achatbot:/app/result-$LA_SIZE-latency.png ./result/
+docker cp achatbot:/app/result-$LA_SIZE-latency.csv ./result/
 
 docker stop achatbot

@@ -1,47 +1,64 @@
+#!/usr/bin/env python
+# author: lwang107@ucsc.edu
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+import math
 
 p = argparse.ArgumentParser(
         usage='plot statistic CSV output from perf stat -r in bar chart',
         description='''
-perf stat -I1000 -x, -o file ...
-toplev -I1000 -x, -o file ... 
-bar-plot.py file (or stdin)
+perf stat -e cpu-clock -x, -o file ...
+bar-plot.py -n 100 file (or stdin)
 delimeter must be ,
 this is for data that is not normalized.''')
 p.add_argument('file', help='CSV file to plot (or stdin)', nargs='?')
+p.add_argument('--num', '-n', help='Number of output columns. 20 by default', 
+               nargs='?')
 p.add_argument('--output', '-o', help='Output to file. Otherwise show.', 
                nargs='?')
 args = p.parse_args()
 
-label = ['Adventure', 'Action', 'Drama', 'Comedy', 'Thriller/Suspense', 'Horror', 'Romantic Comedy', 'Musical',
-         'Documentary', 'Black Comedy', 'Western', 'Concert/Performance', 'Multiple Genres', 'Reality']
-         
-no_movies = [
-    941,
-    854,
-    4595,
-    2125,
-    942,
-    509,
-    548,
-    149,
-    1952,
-    161,
-    64,
-    61,
-    35,
-    5
-]
+if args.file:
+    inf = open(args.file, "r")
+else:
+    inf = sys.stdin
+
+ts = []
+for line in inf:
+    t = line.split(',')[0]
+    try:
+        ts.append(float(t))
+    except ValueError:
+        pass
+ts.sort()
+num = int(args.num) if args.num else 20
+delta = math.ceil((ts[-1]-ts[0])/num)
+step = 0
+stat = [0]
+start = math.floor(ts[0])
+for t in ts:
+    if(t<start+step*delta):
+        raise ValueError(ts)
+    while(t>=start+(step+1)*delta):
+        step+=1
+        stat.append(0)
+    stat[step]=stat[step]+1
+        
+label = [str((start+(s+0.5)*delta)) for s in range(step+1)]
 
 def plot_bar_x():
     # this is for plotting purpose
     index = np.arange(len(label))
-    plt.bar(index, no_movies)
-    plt.xlabel('Genre', fontsize=5)
-    plt.ylabel('No of Movies', fontsize=5)
+    plt.bar(index, stat)
+    plt.xlabel('cpu-clock(ms)', fontsize=5)
+    plt.ylabel('count', fontsize=5)
     plt.xticks(index, label, fontsize=5, rotation=30)
-    plt.title('Market Share for Each Genre 1995-2017')
-    plt.show()
+    plt.title('Response time distribution of chatterbot')
+    if args.output:
+        plt.savefig(args.output)
+    else:
+        plt.show()
 
 plot_bar_x()
