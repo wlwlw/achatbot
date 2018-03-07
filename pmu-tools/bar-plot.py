@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # author: lwang107@ucsc.edu
 import argparse
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -52,9 +54,9 @@ def plot_bar_x():
     # this is for plotting purpose
     index = np.arange(len(label))
     plt.bar(index, stat)
-    plt.xlabel('cpu-clock(ms)', fontsize=5)
-    plt.ylabel('count', fontsize=5)
-    plt.xticks(index, label, fontsize=5, rotation=30)
+    plt.xlabel('cpu-clock(ms)', fontsize=10)
+    plt.ylabel('count', fontsize=10)
+    plt.xticks(index, label, fontsize=7, rotation=0)
     plt.title('Response time distribution of chatterbot')
     if args.output:
         plt.savefig(args.output)

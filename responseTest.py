@@ -9,7 +9,7 @@ def random_string(length):
 # Create a new chat bot named Charlie
 chatbot = ChatBot(
     'Charlie',
-    database='./db.sqlite3',
+    database="english.db",
     read_only=True
 )
 

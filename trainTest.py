@@ -1,11 +1,21 @@
 from chatterbot import ChatBot
 import sys
 from threading import Thread
+import string
+import random
 
-def trainThread(chatbot, length):
+def random_string(length):
+    return ''.join(random.choice(string.ascii_letters) for m in range(length))
+
+def trainThread(i, length):
+    chatbot = ChatBot(
+        'Throughput-bot-'+str(i),
+        trainer='chatterbot.trainers.ListTrainer'
+    )
     print("start train "+chatbot.name)
+    trainSet = [random_string(16) for i in range(length)]
     for i in range(length):
-        chatbot.train("chatterbot.corpus.english")
+        chatbot.train(trainSet)
 
 if __name__ == "__main__":
     length = int(sys.argv[1])
@@ -13,12 +23,7 @@ if __name__ == "__main__":
     print("Run throughput with %d threads of size %d" % (width, length))
     threads = []
     for i in range(width):
-        chatbot = ChatBot(
-            'Throughput-bot-'+str(i),
-            trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
-        )
-        print("start " + chatbot.name)
-        threads.append(Thread(target=trainThread, args=(chatbot, length), name=str(i)))
+        threads.append(Thread(target=trainThread, args=(i, length), name=str(i)))
 
     for thread in threads:
         thread.start()

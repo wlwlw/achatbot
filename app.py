@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 chatbot = ChatBot(
     'Latency Tester',
-    trainer='chatterbot.trainers.ChatterBotCorpusTrainer'
+    trainer='chatterbot.trainers.ChatterBotCorpusTrainer',
+    database="english.db"
 )
 
 @app.route("/<question>")

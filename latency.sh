@@ -1,10 +1,10 @@
 #!/bin/bash
-rm result-latency-$1.csv
+rm result-$1-latency.csv
 touch result-$1-latency.csv
 for((n=0;n<$1;n++))
 do
-	RES="$(perf stat -e cpu-clock -x, --log-fd 3 3>>result-latency-$1.csv python responseTest.py)"
+	RES="$(perf stat -e cpu-clock -x, --log-fd 3 3>>result-$1-latency.csv python responseTest.py)"
 	echo "Response $n: $RES"
 done
 
-python pmu-tools/bar-plot.py -n 20 -o result-$1-latency.png result-$1-latency.csv
+python pmu-tools/bar-plot.py -n $2 -o result-$1-latency.png result-$1-latency.csv
